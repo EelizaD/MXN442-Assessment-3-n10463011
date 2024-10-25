@@ -2,16 +2,14 @@
 install.packages("renv")
 library(renv)
 
+renv::restore() # If needing to install appropriate libraries
+
 library(readr)
 library(dplyr)
-install.packages("neuralnet")
 library(neuralnet)
 
 # Used to check the renv lock file is up to date before commits
 renv::status()
-
-# If needing to install appropriate libraries
-renv::restore()
 
 set.seed(123)
 dataset = read_csv("all_data.csv")
@@ -59,8 +57,9 @@ results_df <- data.frame(
 # Determine target column indices
 target_cols <- 52:54
 
-# Different stepmax values
+# Initiate learning rate values and stepmax
 learningrate_values <- c(10e-6, 10e-5, 10e-4, 10e-3, 10e-2)
+Stepmax = 1e6
 
 # Loop through the number of layers (1, 2, and 3)
 for (num_layers in 1:3) {
@@ -99,7 +98,7 @@ for (num_layers in 1:3) {
           
           # Train the ANN
           ANN <- neuralnet(traintarget ~ ., data = train, hidden = hidden_layers, 
-                           err.fct = 'ce', linear.output = FALSE, stepmax = 1e6, rep=3, learningrate = learningrate)
+                           err.fct = 'ce', linear.output = FALSE, stepmax = Stepmax, rep=3, learningrate = learningrate)
           
           # Make predictions on the test set
           predictions <- predict(ANN, test)
@@ -118,7 +117,7 @@ for (num_layers in 1:3) {
           target_accuracies[[i]] <- c(target_accuracies[[i]], accuracy)
           
           # Print current accuracy
-          cat("Layer:", num_layers, "Nodes:", nodes, "Stepmax:", stepmax, "Learning Rate:", learningrate,
+          cat("Layer:", num_layers, "Nodes:", nodes, "Stepmax:", Stepmax, "Learning Rate:", learningrate,
               "Target Column:", target_col, "Rep:", rep, 
               "Accuracy:", round(accuracy, 4), "\n")
         }
@@ -134,7 +133,7 @@ for (num_layers in 1:3) {
           Target_Column = target_col,
           Num_Layers = num_layers,
           Nodes = nodes,
-          Stepmax = stepmax,
+          Stepmax = Stepmax,
           Learningrate = learningrate,
           Avg_Accuracy = round(avg_accuracy, 2),
           stringsAsFactors = FALSE
@@ -143,7 +142,7 @@ for (num_layers in 1:3) {
         # Print average accuracy
         cat("Average Accuracy for Target Column:", target_col, 
             "Num Layers:", num_layers, "Nodes:", nodes, 
-            "Stepmax:", stepmax, "Learning Rate:", learningrate, "Avg Accuracy:", round(avg_accuracy, 4), "\n")
+            "Stepmax:", Stepmax, "Learning Rate:", learningrate, "Avg Accuracy:", round(avg_accuracy, 4), "\n")
       }
     }
   }
