@@ -1,25 +1,21 @@
 # Load libraries
+install.packages("renv")
+library(renv)
+
+renv::restore() # If needing to install appropriate libraries
+
 library(readr)
 library(dplyr)
-
-install.packages("caTools")    # For Logistic regression 
-library(caTools)
-
-install.packages('randomForest') # For generating random forest model
-library(randomForest)
-
-install.packages('caret')                    # classification and regression training : The library caret has a function to make prediction.
-library(caret)
-install.packages('e1071', dependencies=TRUE)
+library(caTools) # For Logistic regression
+library(randomForest) # For generating random forest model
+library(caret) # classification and regression training : The library caret has a function to make prediction.
+library(e1071)
 
 set.seed(123)
 dataset = read_csv("all_data.csv")
 
 # Used to check the renv lock file is up to date before commits
 renv::status()
-
-# If needing to install appropriate libraries
-renv::restore()
 
 #Copy the column labels for the training and testing set
 training_data <- dataset[1, ]

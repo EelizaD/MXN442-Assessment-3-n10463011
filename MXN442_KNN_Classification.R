@@ -1,16 +1,19 @@
 # Load libraries
+install.packages("renv")
+library(renv)
+
+renv::restore() # If needing to install appropriate libraries
+
 library(readr)
-library(class)
 library(dplyr)
-library(caret)
+library(caret) # classification and regression training : The library caret has a function to make prediction.
+library(class)
+
+set.seed(123)
+dataset = read_csv("all_data.csv")
 
 # Used to check the renv lock file is up to date before commits
 renv::status()
-
-# If needing to install appropriate libraries
-renv::restore()
-
-# Prepare data ------------------------------------------------------------
 
 #Load in the data
 dataset = read_csv("all_data.csv")
@@ -166,24 +169,3 @@ accuracy_avg_RF2
 #Finally, plot the accuracy against the k value
 plot(k, accuracy_RF2, pch=19, col="#9999FF", main="Accuracy of RF2 model for different k values", 
      xlab="k value", ylab="Accuracy of RF2 model", ylim=c(0.5, 1))
-
-
-#Initialise a counter and a matrix to store results
-counter <- 1
-predicted_species <- matrix(0, 49, 45)
-#Create a loop that fits each model for each of k value
-for (i in 1:length(test_labels)){ #For each model
-  train_labels_mod <- as.vector(train_labels[[i]]) #Convert classification to vector
-  for (j in 1:length(k)){ #For each k value
-    predicted_species[ ,counter] <- knn(train = train_data_scaled, 
-                                        test = test_data_scaled, 
-                                        cl = train_labels_mod, 
-                                        k = k[j])
-    counter <- counter + 1
-  } 
-}
-
-#Save the predicted species to a csv file
-write.csv(predicted_species, "knn_predictions.csv", row.names = TRUE)
-#Save the actual classifications to a csv file
-write.csv(test_labels, "actual_classifications.csv", row.names = TRUE)

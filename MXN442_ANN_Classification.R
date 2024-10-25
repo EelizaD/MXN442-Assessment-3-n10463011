@@ -149,7 +149,7 @@ for (num_layers in 1:3) {
 }
 
 # Export the results to a CSV file
-write.csv(results_df, "ann_accuracy_results_2.csv", row.names = TRUE)
+write.csv(results_df, "ann_accuracy_results.csv", row.names = TRUE)
 
 # Print completion message
 print("Results exported to ann_accuracy_results.csv")
