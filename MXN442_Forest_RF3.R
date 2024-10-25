@@ -12,6 +12,12 @@ install.packages('caret')                    # classification and regression tra
 library(caret)
 install.packages('e1071', dependencies=TRUE)
 
+# Used to check the renv lock file is up to date before commits
+renv::status()
+
+# If needing to install appropriate libraries
+renv::restore()
+
 set.seed(123)
 dataset = read_csv("all_data.csv")
 

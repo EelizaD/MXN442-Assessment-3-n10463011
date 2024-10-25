@@ -4,6 +4,11 @@ library(class)
 library(dplyr)
 library(caret)
 
+# Used to check the renv lock file is up to date before commits
+renv::status()
+
+# If needing to install appropriate libraries
+renv::restore()
 
 # Prepare data ------------------------------------------------------------
 
